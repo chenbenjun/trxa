@@ -1,0 +1,216 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* 陶然小灶 - 中国传统美学配色 */
+  --color-chinese-red: var(--chinese-red);
+  --color-chinese-gold: var(--chinese-gold);
+  --color-ink-black: var(--ink-black);
+  --color-rice-white: var(--rice-white);
+  --color-jade-green: var(--jade-green);
+  --color-ink-gray: var(--ink-gray);
+  --color-tea-brown: var(--tea-brown);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --font-sans:
+    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', ui-sans-serif,
+    system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
+  --font-serif:
+    'Noto Serif SC', 'Songti SC', 'SimSun', ui-serif, Georgia, Cambria,
+    'Times New Roman', Times, serif;
+}
+
+:root {
+  --radius: 0.75rem;
+
+  /* 陶然小灶 - 中国传统美学配色方案 */
+  /* 宣白背景 - 暖白色，如宣纸 */
+  --background: oklch(0.98 0.005 85);
+  --foreground: oklch(0.20 0.02 25); /* 墨黑文字 */
+
+  /* 朱红 - 中国红 */
+  --chinese-red: oklch(0.55 0.15 25);
+
+  /* 金色 - 金銮殿金 */
+  --chinese-gold: oklch(0.75 0.12 75);
+
+  /* 墨黑 - 砚台黑 */
+  --ink-black: oklch(0.20 0.02 25);
+
+  /* 翡翠绿 - 翡翠绿 */
+  --jade-green: oklch(0.65 0.08 145);
+
+  /* 水墨灰 - 水墨画灰 */
+  --ink-gray: oklch(0.70 0.02 25);
+
+  /* 茶色 - 茶叶褐 */
+  --tea-brown: oklch(0.55 0.08 45);
+
+  /* 主题色配置 */
+  --primary: var(--chinese-red);
+  --primary-foreground: var(--rice-white);
+
+  --card: oklch(0.99 0.005 85);
+  --card-foreground: var(--ink-black);
+
+  --popover: oklch(0.99 0.005 85);
+  --popover-foreground: var(--ink-black);
+
+  --secondary: var(--chinese-gold);
+  --secondary-foreground: var(--ink-black);
+
+  --muted: oklch(0.95 0.005 85);
+  --muted-foreground: var(--ink-gray);
+
+  --accent: var(--jade-green);
+  --accent-foreground: var(--rice-white);
+
+  --destructive: var(--chinese-red);
+
+  --border: oklch(0.90 0.01 85);
+  --input: oklch(0.90 0.01 85);
+
+  --ring: var(--chinese-red);
+
+  /* 图表配色 */
+  --chart-1: var(--chinese-red);
+  --chart-2: var(--chinese-gold);
+  --chart-3: var(--jade-green);
+  --chart-4: var(--tea-brown);
+  --chart-5: var(--ink-gray);
+
+  --sidebar: oklch(0.98 0.005 85);
+  --sidebar-foreground: var(--ink-black);
+  --sidebar-primary: var(--chinese-red);
+  --sidebar-primary-foreground: var(--rice-white);
+  --sidebar-accent: var(--chinese-gold);
+  --sidebar-accent-foreground: var(--ink-black);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+body {
+  @apply font-sans;
+}
+
+/* 中国传统美学装饰 */
+.chinese-pattern {
+  background-image:
+    radial-gradient(circle at 25% 25%, transparent 50%, var(--chinese-gold) 50%, var(--chinese-gold) 52%, transparent 52%),
+    radial-gradient(circle at 75% 75%, transparent 50%, var(--chinese-red) 50%, var(--chinese-red) 52%, transparent 52%);
+  background-size: 80px 80px;
+  background-position: 0 0, 40px 40px;
+  opacity: 0.03;
+}
+
+.chinese-border {
+  border: 2px solid var(--chinese-red);
+  box-shadow:
+    inset 0 0 0 1px var(--chinese-gold),
+    0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.chinese-title {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  color: var(--chinese-red);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* 打印样式 */
+@media print {
+  body {
+    @apply bg-white text-black;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+}
+
+/* 隐藏滚动条样式 */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* 自定义滚动条样式 */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(139, 69, 19, 0.5);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 69, 19, 0.7);
+}

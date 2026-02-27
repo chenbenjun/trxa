@@ -1,0 +1,7 @@
+<svg width="192" height="192" xmlns="http://www.w3.org/2000/svg">
+  <rect width="192" height="192" fill="#DC2626"/>
+  <circle cx="96" cy="80" r="40" fill="#FEF2E4"/>
+  <path d="M56 140 Q96 100 136 140" stroke="#FEF2E4" stroke-width="8" fill="none"/>
+  <text x="96" y="90" font-family="serif" font-size="48" fill="#DC2626" text-anchor="middle" font-weight="bold">陶</text>
+  <text x="96" y="175" font-family="sans-serif" font-size="24" fill="#FEF2E4" text-anchor="middle">小灶</text>
+</svg>
