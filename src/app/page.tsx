@@ -713,9 +713,9 @@ export default function Home() {
         alert("背景图片太大，请选择小于10MB的图片");
         return;
       }
-      // 转换图片为Base64（自动压缩到6MB以下，超高清质量）
+      // 转换图片为Base64（自动压缩到5MB以下）
       try {
-        const base64 = await fileToBase64(file, 10 * 1024 * 1024, 6);
+        const base64 = await fileToBase64(file, 10 * 1024 * 1024, 5);
         setCustomBackground(base64);
         setBackgroundPreview(file);
         await saveCustomBackground(base64);
@@ -821,7 +821,7 @@ export default function Home() {
       if (!blob) return;
       
       try {
-        const base64 = await fileToBase64(new File([blob], `logo-${Date.now()}.png`, { type: 'image/png' }), 10 * 1024 * 1024, 6, true);
+        const base64 = await fileToBase64(new File([blob], `logo-${Date.now()}.png`, { type: 'image/png' }), 10 * 1024 * 1024, 5, true);
         setCustomLogo(base64);
         await saveCustomLogo(base64);
         setShowLogoCropDialog(false);
@@ -862,9 +862,9 @@ export default function Home() {
       }
     }
 
-    // 转换图片为Base64（自动压缩到6MB以下，高清质量）
+    // 转换图片为Base64（自动压缩到5MB以下）
     try {
-      const base64Images = await filesToBase64Array(Array.from(files), maxSize, 5, 6);
+      const base64Images = await filesToBase64Array(Array.from(files), maxSize, 5, 5);
       setUploadImages(prev => [...prev, ...base64Images]);
       setUploadPreview(base64Images[0]); // 第一张作为主图
       setUploadImage(files[0]); // 第一张作为主文件
@@ -911,9 +911,9 @@ export default function Home() {
       alert(`最多只能上传5张图片，已忽略${fileArray.length - filesToProcess.length}张图片`);
     }
     
-    // 转换图片为Base64（自动压缩到6MB以下，高清质量）
+    // 转换图片为Base64（自动压缩到5MB以下）
     try {
-      const newImages = await filesToBase64Array(filesToProcess, maxSize, 5, 6);
+      const newImages = await filesToBase64Array(filesToProcess, maxSize, 5, 5);
       
       setEditImages((prev) => {
         const updated = [...prev, ...newImages];
