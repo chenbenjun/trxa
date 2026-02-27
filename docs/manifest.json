@@ -2,7 +2,7 @@
   "name": "陶然小灶点餐系统",
   "short_name": "陶然小灶",
   "description": "纯离线单机版点餐系统，无需联网，本地存储",
-  "start_url": "/trxa/index.html",
+  "start_url": "/trxa/",
   "display": "standalone",
   "background_color": "#FEF2E4",
   "theme_color": "#DC2626",
