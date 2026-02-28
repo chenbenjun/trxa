@@ -1313,13 +1313,15 @@ export default function Home() {
     console.log('准备保存活跃订单:', activeOrder);
     addOrUpdateActiveOrder(activeOrder);
     
-    // 刷新活跃订单列表
-    const updatedOrders = getActiveOrders();
-    console.log('刷新活跃订单列表:', updatedOrders.length, '个');
-    console.log('活跃订单详情:', updatedOrders.map(o => ({ 订单号: o.orderId, 桌号: o.tableNumber, 菜品数: o.items.length })));
-    
-    // 强制更新状态
-    setActiveOrders([...updatedOrders]);
+    // 延迟刷新活跃订单列表（确保 localStorage 写入完成）
+    setTimeout(() => {
+      const updatedOrders = getActiveOrders();
+      console.log('延迟刷新活跃订单列表:', updatedOrders.length, '个');
+      console.log('活跃订单详情:', updatedOrders.map(o => ({ 订单号: o.orderId, 桌号: o.tableNumber, 菜品数: o.items.length })));
+      
+      // 强制更新状态
+      setActiveOrders([...updatedOrders]);
+    }, 100);
     
     // 清空购物车和菜品份数
     setCart([]);
@@ -1368,13 +1370,15 @@ export default function Home() {
     console.log('准备保存活跃订单:', activeOrder);
     addOrUpdateActiveOrder(activeOrder);
     
-    // 刷新活跃订单列表
-    const updatedOrders = getActiveOrders();
-    console.log('刷新活跃订单列表:', updatedOrders.length, '个');
-    console.log('活跃订单详情:', updatedOrders.map(o => ({ 订单号: o.orderId, 桌号: o.tableNumber, 菜品数: o.items.length })));
-    
-    // 强制更新状态
-    setActiveOrders([...updatedOrders]);
+    // 延迟刷新活跃订单列表（确保 localStorage 写入完成）
+    setTimeout(() => {
+      const updatedOrders = getActiveOrders();
+      console.log('延迟刷新活跃订单列表:', updatedOrders.length, '个');
+      console.log('活跃订单详情:', updatedOrders.map(o => ({ 订单号: o.orderId, 桌号: o.tableNumber, 菜品数: o.items.length })));
+      
+      // 强制更新状态
+      setActiveOrders([...updatedOrders]);
+    }, 100);
 
     // 清空购物车和菜品份数
     setCart([]);
