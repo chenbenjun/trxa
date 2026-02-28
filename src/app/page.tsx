@@ -2144,7 +2144,7 @@ export default function Home() {
             // 管理模式：显示管理子导航和对应内容
             <div className="h-full flex flex-col p-4">
               {/* 管理子导航 */}
-              <div className="grid grid-cols-8 gap-2 mb-4">
+              <div className="flex flex-wrap gap-2 mb-4">
                 {[
                   { id: 'image', label: '图片管理', icon: ImageIcon },
                   { id: 'price', label: '价格管理', icon: DollarSign },
@@ -2158,7 +2158,7 @@ export default function Home() {
                   <button
                     key={item.id}
                     onClick={() => setManageSubNav(item.id as any)}
-                    className={`flex flex-col items-center p-3 rounded-lg transition-all ${
+                    className={`flex flex-col items-center p-3 rounded-lg transition-all min-w-[80px] flex-1 ${
                       manageSubNav === item.id
                         ? 'bg-amber-800 text-white'
                         : 'bg-white text-gray-900'
