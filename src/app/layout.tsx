@@ -39,6 +39,9 @@ export default function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="theme-color" content="#DC2626" />
         <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-TileColor" content="#DC2626" />
+        <meta name="msapplication-TileImage" content="/trxa/icon-192.png" />
+        <meta name="msapplication-config" content="/trxa/browserconfig.xml" />
         <link rel="manifest" href="/trxa/manifest.json" />
         <link rel="apple-touch-icon" href="/trxa/icon-192.png" />
       </head>

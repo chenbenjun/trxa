@@ -2,38 +2,47 @@
   "name": "陶然小灶点餐系统",
   "short_name": "陶然小灶",
   "description": "纯离线单机版点餐系统，无需联网，本地存储",
-  "start_url": "/trxa/",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#FEF2E4",
   "theme_color": "#DC2626",
   "orientation": "landscape",
-  "scope": "/trxa/",
+  "scope": ".",
   "offline_enabled": true,
   "icons": [
     {
-      "src": "/trxa/icon-192.png",
+      "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/trxa/icon-512.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/trxa/icon-maskable-192.png",
+      "src": "icon-maskable-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/trxa/icon-maskable-512.png",
+      "src": "icon-maskable-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }
   ],
-  "categories": ["food", "restaurant", "business"]
+  "categories": ["food", "restaurant", "business"],
+  "shortcuts": [
+    {
+      "name": "查看进度",
+      "short_name": "进度",
+      "description": "查看当前订单进度",
+      "url": ".",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    }
+  ]
 }
