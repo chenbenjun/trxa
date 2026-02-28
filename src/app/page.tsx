@@ -229,6 +229,7 @@ export default function Home() {
   // 分类名称管理
   const [categoryNames, setCategoryNames] = useState<Record<DishCategory, string>>(CATEGORY_NAMES);
   const [editingCategoryName, setEditingCategoryName] = useState<Record<DishCategory, string>>(CATEGORY_NAMES);
+  const [showEditCategoryNames, setShowEditCategoryNames] = useState(false);
   
   // 价格管理分类筛选
   const [priceManageCategory, setPriceManageCategory] = useState<DishCategory>("special");
@@ -2174,8 +2175,8 @@ export default function Home() {
               <div className="flex-1 overflow-auto">
                 {manageSubNav === 'image' && (
                   <div className="text-gray-900">
-                    {/* 分类筛选 */}
-                    <div className="flex gap-2 mb-4 flex-wrap">
+                    {/* 分类筛选和编辑 */}
+                    <div className="flex gap-2 mb-4 flex-wrap items-center">
                       {(Object.keys(CATEGORY_NAMES) as DishCategory[]).map((cat) => (
                         <button
                           key={cat}
@@ -2189,6 +2190,13 @@ export default function Home() {
                           {CATEGORY_NAMES[cat]}
                         </button>
                       ))}
+                      <button
+                        onClick={() => setShowEditCategoryNames(true)}
+                        className="px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all flex items-center gap-1"
+                      >
+                        <Settings className="w-4 h-4" />
+                        编辑名称
+                      </button>
                     </div>
                     <div className="grid grid-cols-5 gap-4">
                       {dishes
@@ -3045,6 +3053,59 @@ export default function Home() {
       </div>
       
       {/* ============ 对话框组件 ============ */}
+      
+      {/* 编辑分类名称对话框 */}
+      <Dialog open={showEditCategoryNames} onOpenChange={setShowEditCategoryNames}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>编辑分类名称</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3 py-4">
+            {(Object.keys(CATEGORY_NAMES) as DishCategory[]).map((cat) => (
+              <div key={cat} className="flex items-center gap-3">
+                <span className="text-sm text-gray-500 w-16">{cat}:</span>
+                <Input
+                  value={editingCategoryName[cat]}
+                  onChange={(e) => setEditingCategoryName(prev => ({ ...prev, [cat]: e.target.value }))}
+                  className="flex-1"
+                  placeholder="输入分类名称"
+                />
+              </div>
+            ))}
+          </div>
+          <DialogFooter className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => {
+                const defaultNames = {
+                  special: "特色",
+                  jianghu: "江湖菜",
+                  vegetable: "素菜",
+                  soup: "汤类",
+                  alcohol: "酒水",
+                  beverage: "饮料",
+                };
+                setEditingCategoryName(defaultNames);
+              }}
+            >
+              恢复默认
+            </Button>
+            <Button
+              onClick={() => {
+                updateCategoryNames(editingCategoryName);
+                saveCategoryNames(editingCategoryName);
+                setCategoryNames({ ...editingCategoryName });
+                setShowEditCategoryNames(false);
+                alert('分类名称已保存！');
+              }}
+              className="bg-blue-500 hover:bg-blue-600"
+            >
+              <Check className="w-4 h-4 mr-1" />
+              保存
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       
       {/* Logo裁剪对话框 */}
       <Dialog open={showLogoCropDialog} onOpenChange={setShowLogoCropDialog}>
