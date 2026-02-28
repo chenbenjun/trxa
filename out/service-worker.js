@@ -1,7 +1,7 @@
 // 陶然小灶点餐系统 - Service Worker
 // 提供离线缓存和加速加载
 
-const CACHE_NAME = 'trxa-v8';
+const CACHE_NAME = 'trxa-v9';
 const urlsToCache = [
   '/trxa/',
   '/trxa/index.html',
