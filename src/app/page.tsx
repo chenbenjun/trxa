@@ -19,7 +19,7 @@ import { sampleDishes, DEFAULT_TABLES, DEFAULT_PEOPLE } from "@/lib/data";
 import { saveDishes, loadDishes, saveOrder, shouldBackup, updateBackupDate, exportData, savePrinterIP, getPrinterIP, saveAvoidanceTags, getAvoidanceTags, getAvoidanceTagsByCategory, saveAvoidanceTagsByCategory, saveCustomBackground, getCustomBackground, saveCustomLogo, getCustomLogo, saveBackgroundOpacity, getBackgroundOpacity, saveBackgroundBlur, getBackgroundBlur, saveLogoSize, getLogoSize, saveCart, loadCart, clearCart, getActiveOrders, addOrUpdateActiveOrder, completeOrder, getCompletedOrders, getTodayCompletedOrders, clearOldCompletedOrders, clearAllCompletedOrders, saveCategoryNames, getCategoryNames } from "@/lib/storage";
 import { fileToBase64, filesToBase64Array, compressImages, createPlaceholderImage, isValidImageBase64 } from "@/lib/image-utils";
 import { printOrder, printTest } from "@/lib/print";
-import { ShoppingCart, Plus, Minus, Trash2, Printer, Users, Table, X, Check, Settings, Eye, Image as ImageIcon, Maximize2, Minimize2, Printer as PrinterIcon, Search, Flame, Utensils, DollarSign, Cog, Clock, Bell, Leaf, Coffee, Wine, ChevronLeft, ChevronRight, ChevronDown, Crop as CropIcon, Star, StarHalf } from "lucide-react";
+import { ShoppingCart, Plus, Minus, Trash2, Printer, Users, Table, X, Check, Settings, Eye, Image as ImageIcon, Maximize2, Minimize2, Printer as PrinterIcon, Search, Flame, Utensils, DollarSign, Cog, Clock, Bell, Leaf, Coffee, Wine, ChevronLeft, ChevronRight, ChevronDown, Crop as CropIcon, Star, StarHalf, RefreshCw } from "lucide-react";
 import Image from "next/image";
 
 export default function Home() {
@@ -214,7 +214,7 @@ export default function Home() {
   const [currentNav, setCurrentNav] = useState<"dish" | "progress" | "bill" | "manage">("dish");
   
   // 管理子导航
-  const [manageSubNav, setManageSubNav] = useState<"image" | "price" | "tags" | "add" | "background" | "logo" | "printer" | "category">("image");
+  const [manageSubNav, setManageSubNav] = useState<"image" | "price" | "tags" | "add" | "background" | "logo" | "printer" | "category" | "refresh">("image");
   
   // 标签管理相关
   const [tagManageCategory, setTagManageCategory] = useState<TagCategory>("avoidance");
@@ -2154,15 +2154,35 @@ export default function Home() {
                   { id: 'background', label: '背景设置', icon: ImageIcon },
                   { id: 'logo', label: 'LOGO设置', icon: Settings },
                   { id: 'printer', label: '打印设置', icon: Printer },
-                  { id: 'category', label: '分类名称', icon: Settings }
+                  { id: 'category', label: '分类名称', icon: Settings },
+                  { id: 'refresh', label: '刷新应用', icon: RefreshCw }
                 ].map((item) => (
                   <button
                     key={item.id}
-                    onClick={() => setManageSubNav(item.id as any)}
+                    onClick={() => {
+                      if (item.id === 'refresh') {
+                        // 刷新应用，更新Service Worker
+                        if ('serviceWorker' in navigator) {
+                          navigator.serviceWorker.getRegistrations().then(registrations => {
+                            registrations.forEach(registration => {
+                              registration.update();
+                            });
+                            alert('应用已刷新，请重新加载页面以获取最新版本');
+                            window.location.reload();
+                          });
+                        } else {
+                          window.location.reload();
+                        }
+                      } else {
+                        setManageSubNav(item.id as any);
+                      }
+                    }}
                     className={`flex flex-col items-center p-3 rounded-lg transition-all min-w-[80px] flex-1 ${
-                      manageSubNav === item.id
+                      manageSubNav === item.id && item.id !== 'refresh'
                         ? 'bg-amber-800 text-white'
-                        : 'bg-white text-gray-900'
+                        : item.id === 'refresh' 
+                          ? 'bg-green-500 text-white hover:bg-green-600'
+                          : 'bg-white text-gray-900'
                     }`}
                   >
                     <item.icon className="w-5 h-5 mb-1" />
