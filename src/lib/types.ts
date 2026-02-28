@@ -178,14 +178,19 @@ export const DEFAULT_AVOIDANCE_TAGS: Record<DishCategory, AvoidanceTag[]> = {
 // 忌口标签（保留用于向后兼容，现在由 DEFAULT_AVOIDANCE_TAGS 替代）
 export const AVOIDANCE_TAGS = DEFAULT_AVOIDANCE_TAGS.special;
 
-// 分类显示名称映射
-export const CATEGORY_NAMES: Record<DishCategory, string> = {
+// 分类显示名称映射（默认可修改）
+export let CATEGORY_NAMES: Record<DishCategory, string> = {
   special: "特色",
   jianghu: "江湖菜",
   vegetable: "素菜",
   soup: "汤类",
   alcohol: "酒水",
   beverage: "饮料",
+};
+
+// 更新分类名称的函数
+export const updateCategoryNames = (newNames: Record<DishCategory, string>) => {
+  CATEGORY_NAMES = { ...CATEGORY_NAMES, ...newNames };
 };
 
 // 分类颜色映射

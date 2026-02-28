@@ -17,6 +17,7 @@ const STORAGE_KEYS = {
   CART: "taoran_cart", // 购物车数据
   ACTIVE_ORDERS: "taoran_active_orders", // 活跃订单（已下单但未结账）
   COMPLETED_ORDERS: "taoran_completed_orders", // 已结账订单（用于今日汇总）
+  CATEGORY_NAMES: "taoran_category_names", // 分类名称自定义
 };
 
 // 保存菜品数据到本地存储（图片存 IndexedDB，元数据存 localStorage）
@@ -627,5 +628,29 @@ export const clearAllCompletedOrders = (): void => {
     localStorage.removeItem(STORAGE_KEYS.COMPLETED_ORDERS);
   } catch (error) {
     console.error("清空所有已完成订单失败:", error);
+  }
+};
+
+// 保存分类名称
+export const saveCategoryNames = (names: Record<string, string>): void => {
+  try {
+    localStorage.setItem(STORAGE_KEYS.CATEGORY_NAMES, JSON.stringify(names));
+    console.log('分类名称已保存:', names);
+  } catch (error) {
+    console.error("保存分类名称失败:", error);
+  }
+};
+
+// 获取分类名称
+export const getCategoryNames = (): Record<string, string> | null => {
+  try {
+    const data = localStorage.getItem(STORAGE_KEYS.CATEGORY_NAMES);
+    if (data) {
+      return JSON.parse(data);
+    }
+    return null;
+  } catch (error) {
+    console.error("获取分类名称失败:", error);
+    return null;
   }
 };

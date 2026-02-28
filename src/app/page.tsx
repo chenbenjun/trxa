@@ -14,9 +14,9 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Label } from "@/components/ui/label";
-import { Dish, DishCategory, CartItem, CATEGORY_NAMES, TASTE_TAGS, DEFAULT_AVOIDANCE_TAGS, AvoidanceTag, ActiveOrder, TagCategory, Tag, TAG_CATEGORY_NAMES, PRESET_TAGS } from "@/lib/types";
+import { Dish, DishCategory, CartItem, CATEGORY_NAMES, TASTE_TAGS, DEFAULT_AVOIDANCE_TAGS, AvoidanceTag, ActiveOrder, TagCategory, Tag, TAG_CATEGORY_NAMES, PRESET_TAGS, updateCategoryNames } from "@/lib/types";
 import { sampleDishes, DEFAULT_TABLES, DEFAULT_PEOPLE } from "@/lib/data";
-import { saveDishes, loadDishes, saveOrder, shouldBackup, updateBackupDate, exportData, savePrinterIP, getPrinterIP, saveAvoidanceTags, getAvoidanceTags, getAvoidanceTagsByCategory, saveAvoidanceTagsByCategory, saveCustomBackground, getCustomBackground, saveCustomLogo, getCustomLogo, saveBackgroundOpacity, getBackgroundOpacity, saveBackgroundBlur, getBackgroundBlur, saveLogoSize, getLogoSize, saveCart, loadCart, clearCart, getActiveOrders, addOrUpdateActiveOrder, completeOrder, getCompletedOrders, getTodayCompletedOrders, clearOldCompletedOrders, clearAllCompletedOrders } from "@/lib/storage";
+import { saveDishes, loadDishes, saveOrder, shouldBackup, updateBackupDate, exportData, savePrinterIP, getPrinterIP, saveAvoidanceTags, getAvoidanceTags, getAvoidanceTagsByCategory, saveAvoidanceTagsByCategory, saveCustomBackground, getCustomBackground, saveCustomLogo, getCustomLogo, saveBackgroundOpacity, getBackgroundOpacity, saveBackgroundBlur, getBackgroundBlur, saveLogoSize, getLogoSize, saveCart, loadCart, clearCart, getActiveOrders, addOrUpdateActiveOrder, completeOrder, getCompletedOrders, getTodayCompletedOrders, clearOldCompletedOrders, clearAllCompletedOrders, saveCategoryNames, getCategoryNames } from "@/lib/storage";
 import { fileToBase64, filesToBase64Array, compressImages, createPlaceholderImage, isValidImageBase64 } from "@/lib/image-utils";
 import { printOrder, printTest } from "@/lib/print";
 import { ShoppingCart, Plus, Minus, Trash2, Printer, Users, Table, X, Check, Settings, Eye, Image as ImageIcon, Maximize2, Minimize2, Printer as PrinterIcon, Search, Flame, Utensils, DollarSign, Cog, Clock, Bell, Leaf, Coffee, Wine, ChevronLeft, ChevronRight, ChevronDown, Crop as CropIcon, Star, StarHalf } from "lucide-react";
@@ -214,7 +214,7 @@ export default function Home() {
   const [currentNav, setCurrentNav] = useState<"dish" | "progress" | "bill" | "manage">("dish");
   
   // 管理子导航
-  const [manageSubNav, setManageSubNav] = useState<"image" | "price" | "tags" | "add" | "background" | "logo" | "printer">("image");
+  const [manageSubNav, setManageSubNav] = useState<"image" | "price" | "tags" | "add" | "background" | "logo" | "printer" | "category">("image");
   
   // 标签管理相关
   const [tagManageCategory, setTagManageCategory] = useState<TagCategory>("avoidance");
@@ -226,11 +226,15 @@ export default function Home() {
   // 增加菜品标签选择
   const [uploadSelectedTags, setUploadSelectedTags] = useState<Tag[]>([]);
   
-  // 图片管理分类筛选
-  const [imageManageCategory, setImageManageCategory] = useState<DishCategory>("special");
+  // 分类名称管理
+  const [categoryNames, setCategoryNames] = useState<Record<DishCategory, string>>(CATEGORY_NAMES);
+  const [editingCategoryName, setEditingCategoryName] = useState<Record<DishCategory, string>>(CATEGORY_NAMES);
   
   // 价格管理分类筛选
   const [priceManageCategory, setPriceManageCategory] = useState<DishCategory>("special");
+  
+  // 图片管理分类筛选
+  const [imageManageCategory, setImageManageCategory] = useState<DishCategory>("special");
   
   // 界面设置相关
   const [customBackground, setCustomBackground] = useState<string>("");
@@ -413,6 +417,13 @@ export default function Home() {
       } else {
         setActiveOrders(savedActiveOrders);
       }
+    }
+    
+    // 加载分类名称
+    const savedCategoryNames = getCategoryNames();
+    if (savedCategoryNames) {
+      console.log('加载自定义分类名称:', savedCategoryNames);
+      updateCategoryNames(savedCategoryNames);
     }
     
     // 生成订单号（年月日+当日序号）
@@ -2133,7 +2144,7 @@ export default function Home() {
             // 管理模式：显示管理子导航和对应内容
             <div className="h-full flex flex-col p-4">
               {/* 管理子导航 */}
-              <div className="grid grid-cols-7 gap-2 mb-4">
+              <div className="grid grid-cols-8 gap-2 mb-4">
                 {[
                   { id: 'image', label: '图片管理', icon: ImageIcon },
                   { id: 'price', label: '价格管理', icon: DollarSign },
@@ -2141,7 +2152,8 @@ export default function Home() {
                   { id: 'add', label: '增加菜品', icon: Plus },
                   { id: 'background', label: '背景设置', icon: ImageIcon },
                   { id: 'logo', label: 'LOGO设置', icon: Settings },
-                  { id: 'printer', label: '打印设置', icon: Printer }
+                  { id: 'printer', label: '打印设置', icon: Printer },
+                  { id: 'category', label: '分类名称', icon: Settings }
                 ].map((item) => (
                   <button
                     key={item.id}
@@ -2756,6 +2768,67 @@ export default function Home() {
                             </ul>
                           </div>
                         </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {manageSubNav === 'category' && (
+                  <div className="text-gray-900">
+                    <div className="space-y-4 max-w-2xl">
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <h3 className="font-medium text-blue-900 mb-2">分类名称设置</h3>
+                        <p className="text-sm text-blue-800">
+                          修改菜品分类的显示名称，保存后立即生效。
+                        </p>
+                      </div>
+
+                      <div className="space-y-3">
+                        {(Object.keys(CATEGORY_NAMES) as DishCategory[]).map((cat) => (
+                          <div key={cat} className="flex items-center gap-4 bg-white p-3 rounded-lg border">
+                            <span className="text-sm text-gray-500 w-20">{cat}:</span>
+                            <Input
+                              value={editingCategoryName[cat]}
+                              onChange={(e) => setEditingCategoryName(prev => ({ ...prev, [cat]: e.target.value }))}
+                              className="flex-1"
+                              placeholder="输入分类名称"
+                            />
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="flex gap-2">
+                        <Button
+                          onClick={() => {
+                            updateCategoryNames(editingCategoryName);
+                            saveCategoryNames(editingCategoryName);
+                            setCategoryNames({ ...editingCategoryName });
+                            alert('分类名称已保存！');
+                          }}
+                          className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white"
+                        >
+                          <Check className="w-4 h-4 mr-2" />
+                          保存分类名称
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={() => {
+                            const defaultNames = {
+                              special: "特色",
+                              jianghu: "江湖菜",
+                              vegetable: "素菜",
+                              soup: "汤类",
+                              alcohol: "酒水",
+                              beverage: "饮料",
+                            };
+                            setEditingCategoryName(defaultNames);
+                            updateCategoryNames(defaultNames);
+                            saveCategoryNames(defaultNames);
+                            setCategoryNames({ ...defaultNames });
+                            alert('已恢复默认分类名称！');
+                          }}
+                        >
+                          恢复默认
+                        </Button>
                       </div>
                     </div>
                   </div>
